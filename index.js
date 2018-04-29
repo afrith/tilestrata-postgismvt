@@ -99,7 +99,7 @@ module.exports = function(options) {
 						SELECT ST_AsMVT(q, '${tile.layer}', ${resolution}, 'geom') AS mvt FROM (
                             WITH a AS (
 							SELECT ST_AsMVTGeom(
-                                ST_SimplifyVW(ST_Transform(${lyr.table}.${lyr.geometry}, 3857), ${1 << (21-tile.z)}),
+                                ST_SimplifyVW(ST_Transform(${lyr.table}.${lyr.geometry}, 3857), ${1 << (32-2*tile.z)}),
                                 TileBBox(${tile.z}, ${tile.x}, ${tile.y}, 3857),
                                 ${resolution},
                                 ${lyr.buffer},
