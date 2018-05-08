@@ -93,6 +93,23 @@ module.exports = function(options) {
 				) AS q
 				`;
 				break;
+			case "centroid":
+					query = `
+						SELECT ST_AsMVT(q, '${tile.layer}', ${resolution}, 'geom') AS mvt FROM (
+                            WITH a AS (
+							SELECT ST_AsMVTGeom(
+                                ST_Centroid(ST_Transform(${lyr.table}.${lyr.geometry}, 3857)),
+                                TileBBox(${tile.z}, ${tile.x}, ${tile.y}, 3857),
+                                ${resolution},
+                                ${lyr.buffer},
+                                ${clip_geom} ) geom ${fields}
+							FROM ${lyr.table}
+							WHERE ST_Intersects(TileBBox(${tile.z}, ${tile.x}, ${tile.y}, ${lyr.srid}), ${lyr.table}.${lyr.geometry})
+                            )
+                            SELECT * FROM a WHERE geom IS NOT NULL
+						) AS q
+					`;
+					break;
 
 				default:
 					query = `
