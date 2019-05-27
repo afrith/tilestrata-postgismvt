@@ -113,8 +113,8 @@ module.exports = function(options) {
 
 				default:
 					var query_transform = `ST_Transform(${lyr.table}.${lyr.geometry}, 3857)`;
-					var query_simplify = tile.z <= 16 ?
-						`ST_SimplifyVW(${query_transform}, ${1 << (32-2*tile.z)})` :
+					var query_simplify = tile.z <= 15 ?
+						`ST_SimplifyVW(${query_transform}, ${1 << (30-2*tile.z)})` :
 						query_transform;
 					query = `
 						SELECT ST_AsMVT(q, '${tile.layer}', ${resolution}, 'geom') AS mvt FROM (
