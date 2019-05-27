@@ -125,7 +125,7 @@ module.exports = function(options) {
                                 ${resolution},
                                 ${lyr.buffer},
                                 ${clip_geom} ) geom ${fields}
-							FROM ${lyr.table}
+							FROM (${lyr.table_query || lyr.table}) AS ${lyr.table}
 							WHERE ST_Intersects(TileBBox(${tile.z}, ${tile.x}, ${tile.y}, ${lyr.srid}), ${lyr.table}.${lyr.geometry})
                             )
                             SELECT * FROM a WHERE geom IS NOT NULL
